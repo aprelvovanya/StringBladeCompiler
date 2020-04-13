@@ -41,12 +41,26 @@ Changes,
 Installation
 =======================
 
-Add the package to composer.json:
+Add the package (wpb/string-blade-compiler) to composer.json:
 
 	"require": {
 		...
 		"wpb/string-blade-compiler": "VERSION"
 	},
+	
+	
+Add the package (aprelvovanya/string-blade-compiler) to composer.json:
+
+	"require": {
+		...
+		"aprelvovanya/string-blade-compiler": "^5.0",
+	},
+	"repositories": [
+		{
+			"type": "git",
+			"url": "https://github.com/aprelvovanya/StringBladeCompiler"
+		}
+	],
 	
 > To get versions 'composer show wpb/string-blade-compiler', such as 'dev-master, * 3.2.x-dev, 3.2.0, 3.0.x-dev, 3.0.0, 2.1.0, 2.0.x-dev, 2.0.0, 1.0.x-dev, 1.0.0'
 
