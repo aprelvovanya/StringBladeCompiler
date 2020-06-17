@@ -27,7 +27,7 @@ class CompilerEngine extends \Illuminate\View\Engines\CompilerEngine
         if (!is_object($path)) {
             $this->lastCompiled[] = $path;
         } else {
-            $this->lastCompiled[] = 'StringView-' . $path->cache_key;
+            $this->lastCompiled[] = 'StringView-'.$path->cache_key;
         }
 
         // If this given view has expired, which means it has simply been edited since
@@ -56,8 +56,7 @@ class CompilerEngine extends \Illuminate\View\Engines\CompilerEngine
      *
      * @param bool $delete
      */
-    public function setDeleteViewCacheAfterRender($delete = true)
-    {
+    public function setDeleteViewCacheAfterRender($delete = true) {
         $this->deleteViewCacheAfterRender = $delete;
     }
 }

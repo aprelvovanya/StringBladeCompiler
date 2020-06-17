@@ -29,7 +29,7 @@ class StringView extends View
      */
     public function __construct(Factory $factory, Engine $engine, $view, $path, $data = [])
     {
-        $this->view = (is_array($view)) ? (object) $view : $view;
+        $this->view = (is_array($view))?(object) $view:$view;
         $this->path = $path;
         $this->engine = $engine;
         $this->factory = $factory;
@@ -37,21 +37,23 @@ class StringView extends View
         $this->data = $data instanceof Arrayable ? $data->toArray() : (array) $data;
 
         // check if view has secondsTemplateCacheExpires set, or get from config
-        if (!property_exists($this->view, "secondsTemplateCacheExpires") || !is_numeric($this->view->secondsTemplateCacheExpires)) {
+        if ( !property_exists($this->view, "secondsTemplateCacheExpires") || !is_numeric($this->view->secondsTemplateCacheExpires) ) {
             $this->view->secondsTemplateCacheExpires = config('blade.secondsTemplateCacheExpires');
-            if (is_null($this->view->secondsTemplateCacheExpires)) {
+            if ( is_null($this->view->secondsTemplateCacheExpires) ) {
                 $this->view->secondsTemplateCacheExpires = 0;
             }
         }
 
         // this is the actually blade template data
-        if (!property_exists($this->view, "template")) {
+        if ( !property_exists($this->view, "template") )
+        {
             // is the same as sending a blank template file
             $this->view->template = '';
         }
 
         // each template requires a unique cache key, or generate one
-        if (!property_exists($this->view, "cache_key")) {
+        if ( !property_exists($this->view, "cache_key") )
+        {
             // special, to catch if template is empty
             if (empty($this->view->template)) {
                 $this->view->cache_key = md5('_empty_template_');
@@ -61,8 +63,7 @@ class StringView extends View
         }
     }
 
-    public function getViewTemplate()
-    {
+    public function getViewTemplate() {
         return $this->view->template;
     }
 
@@ -73,7 +74,7 @@ class StringView extends View
      */
     public function getName()
     {
-        return (isset($this->view->template) ? md5($this->view->template) : 'StringViewTemplate');
+        return (isset($this->view->template)?md5($this->view->template):'StringViewTemplate');
     }
 
     /**
@@ -109,12 +110,14 @@ class StringView extends View
      */
     function is_timestamp($timestamp)
     {
-        $check = (is_int($timestamp) or is_float($timestamp))
+        $check = (is_int($timestamp) OR is_float($timestamp))
             ? $timestamp
             : (string) (int) $timestamp;
 
         return ($check === $timestamp)
-            and ((int) $timestamp <= PHP_INT_MAX)
-            and ((int) $timestamp >= ~PHP_INT_MAX);
+            AND ( (int) $timestamp <= PHP_INT_MAX)
+            AND ( (int) $timestamp >= ~PHP_INT_MAX);
     }
+
+
 }

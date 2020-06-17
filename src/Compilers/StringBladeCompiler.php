@@ -8,8 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\View\Compilers\CompilerInterface;
 use InvalidArgumentException;
 
-class StringBladeCompiler extends BladeCompiler
-{
+class StringBladeCompiler extends BladeCompiler {
 
     private $use_cache_keys = [];
     private $viewData = [];
@@ -29,8 +28,7 @@ class StringBladeCompiler extends BladeCompiler
         $this->cachePath = $cachePath;
     }
 
-    public function setViewData($viewData)
-    {
+    public function setViewData($viewData) {
         $this->viewData = $viewData;
     }
 
@@ -46,7 +44,8 @@ class StringBladeCompiler extends BladeCompiler
             $this->viewData = $viewData;
         }
 
-        if (property_exists($this->viewData, 'cache_key')) {
+        if (property_exists($this->viewData, 'cache_key'))
+        {
             $this->setPath($this->viewData->cache_key);
         }
 
@@ -67,10 +66,9 @@ class StringBladeCompiler extends BladeCompiler
             $contents .= "<?php /**PATH {$this->viewData->templateRefKey} ENDPATH**/ ?>";
         }
 
-        if (!is_null($this->cachePath)) {
+        if (! is_null($this->cachePath)) {
             $this->files->put(
-                $this->getCompiledPath($this->viewData),
-                $contents
+                $this->getCompiledPath($this->viewData), $contents
             );
         }
     }
@@ -83,7 +81,8 @@ class StringBladeCompiler extends BladeCompiler
      */
     public function getCompiledPath($viewData)
     {
-        if (!property_exists($viewData, 'cache_key')) {
+        if (!property_exists($viewData, 'cache_key'))
+        {
             $cacheKey = Str::random(40);
             while (in_array($cacheKey, $this->use_cache_keys)) {
                 $cacheKey = Str::random(40);
@@ -92,7 +91,7 @@ class StringBladeCompiler extends BladeCompiler
             $viewData->cache_key = $cacheKey;
         }
 
-        return $this->cachePath . '/' . sha1($viewData->cache_key) . '.php';
+        return $this->cachePath.'/'.sha1($viewData->cache_key).'.php';
     }
 
     /**
@@ -114,7 +113,8 @@ class StringBladeCompiler extends BladeCompiler
         // If the compiled file doesn't exist we will indicate that the view is expired
         // so that it can be re-compiled. Else, we will verify the last modification
         // of the views is less than the modification times of the compiled views.
-        if (!$this->cachePath || !$this->files->exists($compiled)) {
+        if ( ! $this->cachePath || ! $this->files->exists($compiled))
+        {
             return true;
         }
 
@@ -130,6 +130,7 @@ class StringBladeCompiler extends BladeCompiler
         // Note: The lastModified time for a file on homestead will use the time from the host system.
         //       This means the vm time could be off, so setting the timeout to seconds may not work as expected.
 
-        return time() >= ($this->files->lastModified($compiled) + $viewData->secondsTemplateCacheExpires);
+        return time() >= ($this->files->lastModified($compiled) + $viewData->secondsTemplateCacheExpires) ;
     }
+
 }

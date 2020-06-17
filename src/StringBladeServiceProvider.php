@@ -1,16 +1,13 @@
 <?php
-
 namespace Wpb\String_Blade_Compiler;
 
+use Illuminate\View\Engines\EngineResolver;
 use Illuminate\View\FileViewFinder;
 use Illuminate\View\ViewServiceProvider;
-use Illuminate\View\Engines\EngineResolver;
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Wpb\String_Blade_Compiler\Engines\CompilerEngine;
 use Wpb\String_Blade_Compiler\Compilers\StringBladeCompiler;
+use Wpb\String_Blade_Compiler\Engines\CompilerEngine;
 
-class StringBladeServiceProvider extends ViewServiceProvider implements DeferrableProvider
-{
+class StringBladeServiceProvider extends ViewServiceProvider{
 
     /**
      * Register the service provider.
@@ -22,8 +19,7 @@ class StringBladeServiceProvider extends ViewServiceProvider implements Deferrab
 
         // include the package config
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/blade.php',
-            'blade'
+            __DIR__.'/../config/blade.php', 'blade'
         );
 
         // load the alias (handled by the Laravel autoloader)
@@ -94,12 +90,12 @@ class StringBladeServiceProvider extends ViewServiceProvider implements Deferrab
         // recreate the view.finder
         $this->app->bind('view.finder', function ($app) use ($oldFinder) {
 
-            $paths = (isset($oldFinder['paths'])) ? array_unique(array_merge($app['config']['view.paths'], $oldFinder['paths']), SORT_REGULAR) : $app['config']['view.paths'];
+            $paths = (isset($oldFinder['paths']))?array_unique(array_merge($app['config']['view.paths'], $oldFinder['paths']), SORT_REGULAR):$app['config']['view.paths'];
 
             $viewFinder = new FileViewFinder($app['files'], $paths);
 
             if (!empty($oldFinder['hints'])) {
-                array_walk($oldFinder['hints'], function ($value, $key) use ($viewFinder) {
+                array_walk($oldFinder['hints'], function($value, $key) use ($viewFinder) {
                     $viewFinder->addNamespace($key, $value);
                 });
             }
@@ -123,7 +119,7 @@ class StringBladeServiceProvider extends ViewServiceProvider implements Deferrab
             // environment will resolve the engines needed for various views based on the
             // extension of view file. We call a method for each of the view's engines.
             foreach (['file', 'php', 'blade', 'stringblade'] as $engine) {
-                $this->{'register' . ucfirst($engine) . 'Engine'}($resolver);
+                $this->{'register'.ucfirst($engine).'Engine'}($resolver);
             }
 
             return $resolver;
@@ -151,33 +147,5 @@ class StringBladeServiceProvider extends ViewServiceProvider implements Deferrab
         $resolver->register('stringblade', function () use ($app) {
             return new CompilerEngine($app['stringblade.compiler']);
         });
-    }
-
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        if (config('blade.autoload_custom_directives')) {
-            $blade = app('blade.compiler');
-            $string_blade = app('stringblade.compiler');
-
-            collect($blade->getCustomDirectives())
-                ->each(function ($directive, $name) use ($string_blade) {
-                    $string_blade->directive($name, $directive);
-                });
-        }
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [StringBlade::class];
     }
 }

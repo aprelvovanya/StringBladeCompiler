@@ -93,8 +93,7 @@ class BladeCompiler extends BladeCompilerParent
      * @param  bool  $recompile
      * @return void
      */
-    public function setForceTemplateRecompile($recompile = true)
-    {
+    public function setForceTemplateRecompile($recompile = true) {
         $this->forceTemplateRecompile = $recompile;
     }
 
@@ -114,4 +113,5 @@ class BladeCompiler extends BladeCompilerParent
 
         return parent::isExpired($path);
     }
+
 }

@@ -35,6 +35,7 @@ class View extends \Illuminate\View\View
         $this->factory = $factory;
 
         $this->data = $data instanceof Arrayable ? $data->toArray() : (array) $data;
+
     }
 
     /**
@@ -50,4 +51,5 @@ class View extends \Illuminate\View\View
     {
         return parent::__call($method, $parameters);
     }
+
 }

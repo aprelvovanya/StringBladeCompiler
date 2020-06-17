@@ -1,5 +1,4 @@
 <?php
-
 namespace Wpb\String_Blade_Compiler;
 
 use Illuminate\Contracts\Events\Dispatcher;
@@ -155,4 +154,5 @@ class Factory extends FactoryParent
         // resolve function throws error if $stringkey is not a registered engine
         return $this->engines->resolve($stringkey);
     }
+
 }
